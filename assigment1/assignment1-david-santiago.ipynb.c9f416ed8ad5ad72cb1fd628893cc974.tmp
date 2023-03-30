@@ -1,0 +1,5 @@
+average_df = (accuracy_df + precision_df + recall_df) / 3
+sns.heatmap(average_df, annot=True, fmt=".3f")
+plt.title("Average Performace: (Acc + Prec + Recall) / 3")
+
+plt.show()

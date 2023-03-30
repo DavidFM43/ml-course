@@ -1,0 +1,2 @@
+clfs_metrics_df = pd.DataFrame(clfs_metrics, index=["Accuracy", "Precision", "Recall"])
+clfs_metrics_df

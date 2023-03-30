@@ -1,0 +1,30 @@
+# Define the x and y ranges for plotting the decision boundary
+x = np.linspace(-1.0, 1.5, 100)
+y = alpha * x + beta
+
+# Determine the indices of the two features to use for training and testing
+ft1 = list(feature_names).index("Height")
+ft2 = list(feature_names).index("Shell weight")
+
+# Subset the training and testing data to only include the selected features
+X_train_fts = X_train[:, [ft1, ft2]]
+X_test_fts = X_test[:, [ft1, ft2]]
+
+# Instantiate the GaussianClassifier and fit it to the training data
+clf = GaussianClassifier()
+clf.fit(X_train_fts, y_train)
+
+# Set the covariance of the classifier to a diagonal matrix with unique_var along the diagonal
+unique_var = X_train_fts.var()
+clf.cov = np.stack([np.diag([unique_var, unique_var]) for _ in range(2)], 0)
+
+# Plot the decision regions and training/test data points
+plot_decision_regions(
+    X=X_test_fts,
+    y=y_test,
+    classifier=clf,
+    x_an=x,
+    y_an=y,
+    resolution=0.05,
+    show_analytical=True,
+)

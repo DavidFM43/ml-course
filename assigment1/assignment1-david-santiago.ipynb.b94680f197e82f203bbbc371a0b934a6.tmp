@@ -1,0 +1,6 @@
+for metric in clfs_metrics_df.index:
+    features_metric = clfs_metrics_df.loc[metric]
+    plt.figure(figsize=(14, 3))
+    plt.title("Gaussian Univariate Classifier - Metric: " + str(metric))
+    plt.bar(clfs_metrics_df.columns, features_metric)
+plt.show()

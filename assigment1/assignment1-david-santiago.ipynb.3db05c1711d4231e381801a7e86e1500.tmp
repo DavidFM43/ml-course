@@ -1,0 +1,14 @@
+# Bivariate Gaussian classifier using the best features
+# Find the index of the column "Height" in the feature_names list
+ft1 = list(feature_names).index("Height")
+
+# Find the index of the column "Shell weight" in the feature_names list
+ft2 = list(feature_names).index("Shell weight")
+
+# Select the columns corresponding to the two best features
+X_tr_fts = X_train[:, [ft1, ft2]]
+X_tst_fts = X_test[:, [ft1, ft2]]
+
+# Initialize and fit the Gaussian classifier using the training data
+clf = GaussianClassifier()
+clf.fit(X_tr_fts, y_train)

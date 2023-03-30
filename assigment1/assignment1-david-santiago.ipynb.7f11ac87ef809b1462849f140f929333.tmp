@@ -1,0 +1,81 @@
+import matplotlib.patches as mpatches
+
+
+def plot_decision_regions(
+    X,
+    y,
+    classifier,
+    title="Decision regions",
+    x_an=None,
+    y_an=None,
+    show_points=False,
+    resolution=0.02,
+    show_analytical=False,
+) -> None:
+
+    """Plot decision regions for a classifier.
+
+    Args:
+        X (numpy.ndarray): Features to plot.
+        y (numpy.ndarray): Class labels for the features.
+        classifier (object): Classifier object with a predict method.
+        title (str, optional): Title for the plot. Defaults to 'Decision regions'.
+        x_an (numpy.ndarray, optional): X-coordinates of analytical decision boundary. Defaults to None.
+        y_an (numpy.ndarray, optional): Y-coordinates of analytical decision boundary. Defaults to None.
+        show_points (bool, optional): Whether to show data points. Defaults to False.
+        resolution (float, optional): Resolution for the meshgrid. Defaults to 0.02.
+        show_analytical (bool, optional): Whether to show analytical decision boundary. Defaults to False.
+
+    Returns:
+        None.
+    """
+    labels = ["0", "1", "Reject"]
+    # Set up marker generator and color map
+    markers = ("o", "x", "s", "^", "v")
+    colors = ("red", "blue", "lightgreen", "gray", "cyan")
+    n_classes = 3 if classifier.reject_lambda is not None else len(np.unique(y))
+    cmap = ListedColormap(colors[:n_classes])
+    plt.figure(figsize=(7, 7))
+
+    # Plot the decision surface
+    x1_min, x1_max = X[:, 0].min() - 1, X[:, 0].max() + 1
+    x2_min, x2_max = X[:, 1].min() - 1, X[:, 1].max() + 1
+    xx1, xx2 = np.meshgrid(
+        np.arange(x1_min, x1_max, resolution), np.arange(x2_min, x2_max, resolution)
+    )
+    Z = classifier.predict(np.array([xx1.ravel(), xx2.ravel()]).T)
+    Z = Z.reshape(xx1.shape)
+    plt.contourf(xx1, xx2, Z, alpha=0.3, cmap=cmap)
+    plt.xlim(xx1.min(), xx1.max())
+    plt.ylim(xx2.min(), xx2.max())
+
+    # Plot class samples
+    if show_points:
+        for idx, cl in enumerate(np.unique(y)):
+            plt.scatter(
+                x=X[y == cl, 0],
+                y=X[y == cl, 1],
+                alpha=0.2,
+                c=colors[idx],
+                marker=markers[idx],
+                label=cl,
+            )
+        plt.legend(loc="upper left")
+
+    # Plot analytical decision boundary
+    if show_analytical:
+        title = "Analytical decision boundary"
+        plt.plot(x_an, y_an, linewidth=5, color="yellow", label="Decision boundary")
+        plt.legend()
+
+    # Set plot labels and title
+    plt.xlabel("Height")
+    plt.ylabel("Shell weight")
+    plt.title(title)
+    plt.legend(
+        handles=[
+            mpatches.Patch(color=color, label=label)
+            for color, label in zip(colors[:n_classes], labels[:n_classes])
+        ]
+    )
+    plt.show()

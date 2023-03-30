@@ -1,0 +1,26 @@
+# metric dataframes
+accuracy_df = pd.DataFrame(index=feature_names, columns=feature_names, dtype=float)
+precision_df = pd.DataFrame(index=feature_names, columns=feature_names, dtype=float)
+recall_df = pd.DataFrame(index=feature_names, columns=feature_names, dtype=float)
+
+for ft1, ft1_name in enumerate(feature_names):
+    for ft2, ft2_name in enumerate(feature_names):
+        if ft2 <= ft1:
+            continue
+        # train bivariate gaussian classifier
+        X_tr_fts = X_train[:, [ft1, ft2]]
+        X_tst_fts = X_test[:, [ft1, ft2]]
+        clf = GaussianClassifier()
+        clf.fit(X_tr_fts, y_train)
+
+        # Set the covariance matrix to a constant identity
+        unique_var = X_tr_fts.var()
+        clf.cov = np.stack([np.diag([unique_var, unique_var]) for _ in range(2)], 0)
+
+        # make predictions
+        y_pred = clf.predict(X_tst_fts)
+
+        # calculate performance metrics
+        accuracy_df.loc[ft1_name, ft2_name] = accuracy_score(y_pred, y_test)
+        precision_df.loc[ft1_name, ft2_name] = precision_score(y_pred, y_test)
+        recall_df.loc[ft1_name, ft2_name] = recall_score(y_pred, y_test)

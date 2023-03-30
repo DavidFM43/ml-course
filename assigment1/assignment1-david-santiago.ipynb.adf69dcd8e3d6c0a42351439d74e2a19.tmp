@@ -1,0 +1,20 @@
+# Problem values
+mu_00 = clf.means[0][0]
+mu_10 = clf.means[0][1]
+mu_01 = clf.means[1][0]
+mu_11 = clf.means[1][1]
+sigma = clf.cov[0][0][0]
+
+# A priori probabilities
+p0 = clf.priors[0]
+p1 = clf.priors[1]
+
+# Line equation constants for our problem
+alpha = (mu_00 - mu_01) / (mu_11 - mu_10)
+beta = (
+    (-2 * sigma**2 * np.log(p1 / p0))
+    + (mu_01**2 + mu_11**2 - mu_00**2 - mu_10**2)
+) / (2 * (mu_11 - mu_10))
+
+# View how is defined the line equation
+print("Line equation:    y={}x+{}".format(alpha, beta))

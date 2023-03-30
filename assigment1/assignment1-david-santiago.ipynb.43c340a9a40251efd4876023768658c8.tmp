@@ -1,0 +1,4 @@
+X = df_features.drop(columns=["Rings"]).values
+y = df_features["Rings"].values
+
+print("X: \n {} \n =========== \n y: \n{}".format(X, y))
