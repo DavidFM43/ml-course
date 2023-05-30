@@ -1,2 +1,0 @@
-best_ft = clfs_metrics_df.mean(0).idxmax()
-best_ft

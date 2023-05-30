@@ -1,5 +1,0 @@
-print(
-    "Covariance matrix (Σ = σI for every class) \n {} \n\n Mean array - Class 0: \n {} \n\n Mean array - Class 1: \n {}".format(
-        clf.cov[0], clf.means[0], clf.means[0]
-    )
-)
